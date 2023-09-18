@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>pubmed-pairs</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"/>
+  </head>
+
+  <body>
+    <section class="mw8 center sans-serif">
+
+      <div class="container-fluid text-center">
+        <h1 class="mt-5">pubmed-pairs</h1>
+      </div>
+
+      <div class="pv2" id="search">
+
+        <div>
+          <label class="db fw6 lh-copy f6" for="first">First search terms:</label>
+          <textarea class="pa2 ba w-100" id="first" name="first" rows="1" cols="50">virus, bacteria</textarea>
+        </div>
+
+        <div>
+          <label class="db fw6 lh-copy f6" for="second">Second search terms:</label>
+          <textarea class="pa2 ba w-100" id="second" name="second" rows="1" cols="50">HLA-DQA1, HLA-DQB1, IL6, PDCD1, TIMP4</textarea>
+        </div>
+
+        <div class="pv2">
+          <button id="search-button">Search</button>
+        </div>
+      </div>
+
+      <div id="barplot">
+      </div>
+
+      <div id="info">
+      </div>
+
+      <div class="pv2" id="table">
+      </div>
+
+		  <h2 id="papers-title"></h2>
+      <div class="pv2" id="papers">
+      </div>
+
+    </section>
+
+  </body>
+
+  <style>
+  .hits {
+    cursor: pointer;
+    color: blue;
+    /*text-decoration: underline;*/
+  }
+  .dots { color: blue; cursor: pointer; }
+  .more {display: none;}
+  .pmid {user-select: all;}
+  </style>
+
+	<script type="module" src="main.js"></script>
+
+</html>
