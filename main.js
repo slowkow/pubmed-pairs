@@ -25,6 +25,13 @@
  *
  */
 
+
+var g_table_length = 0
+var g_build_table_first = true
+
+var cache_count_papers = {}
+var cache_get_papers = {}
+
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 function pairs(first, second) {
@@ -36,8 +43,6 @@ function pairs(first, second) {
   }
   return pairs
 }
-
-var cache_count_papers = {}
 
 async function count_papers(first, second) {
   const term = `${first} ${second}`
@@ -63,8 +68,6 @@ async function count_papers(first, second) {
   }
   return +resp.esearchresult.count
 }
-
-var cache_get_papers = {}
 
 async function get_papers(first, second) {
   const term = `${first} ${second}`
@@ -113,9 +116,6 @@ async function get_papers(first, second) {
   })
 }
 
-
-var g_build_table_first = true
-
 async function build_table(data) {
 	var head = `<tr class="striped--near-white">
     <th class="pv2 ph3">Pair</th>
@@ -139,6 +139,14 @@ async function build_table(data) {
       <td class="pv2 ph3">${link}</td>
     </tr>`)
 	}
+  while (i++ < g_table_length) {
+		rows.push(`<tr class="striped--near-white">
+      <td class="pv2 ph3">${i}</td>
+      <td class="pv2 ph3"> </td>
+      <td class="pv2 ph3"> </td>
+      <td class="pv2 ph3"> </td>
+    </tr>`)
+  }
 	var table = `<table class="collapse ba br2 b--black-10 pv2 ph3 mt4">
     <tbody>${rows.join('')}</tbody>
   </table>`
@@ -193,6 +201,7 @@ async function click_search() {
   const first = document.getElementById("first").value.split(/,/)
   const second = document.getElementById("second").value.split(/,/)
   const ps = pairs(first, second)
+  g_table_length = ps.length
   const info =  document.getElementById("info")
   info.innerText = `${ps.length} pairs: ${ps.join(', ')}`
   for (const x of first) {
