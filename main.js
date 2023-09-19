@@ -129,9 +129,9 @@ async function build_table(data) {
     i++
 		var count = `<span class="hits" id="${d.pair}">${d.count}</span>`
     if (d.count == 0) {
-      count = `<span id="${d.pair}">${d.count}</span>`
+      count = `<span class="mid-gray" id="${d.pair}">${d.count}</span>`
     }
-    var link = `<a target="_blank" rel="noopener noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/?term=${d.pair}">link</a>`
+    var link = `<a target="_blank" rel="noopener noreferrer" class="link" href="https://pubmed.ncbi.nlm.nih.gov/?term=${d.pair}">pubmed</a>`
 		rows.push(`<tr class="striped--near-white">
       <td class="pv2 ph3">${i}</td>
       <td class="pv2 ph3">${d.pair}</td>
@@ -166,7 +166,7 @@ function build_papers(papers, title) {
     var html = `<article class="pv1">
         <div class="flex flex-row">
           <div class="w-100">
-            <p class="f5 fw4 lh-title mv0"><a target="_blank" rel="noopener noreferrer" href="https://pubmed.ncbi.nlm.nih.gov/${p.pmid}">${p.title}</a></p>
+            <p class="f5 fw5 lh-title mv0"><a target="_blank" rel="noopener noreferrer" class="link" href="https://pubmed.ncbi.nlm.nih.gov/${p.pmid}">${p.title}</a></p>
             <p class="f7 lh-copy mv0">${p.authors}</p>
             <p class="f7 lh-copy mv0">${p.journal.substr(3)}</p>
             <p class="f7 lh-copy mv0">PMID: <span class="pmid">${p.pmid}</span></p>

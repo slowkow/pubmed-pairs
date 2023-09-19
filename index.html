@@ -20,12 +20,12 @@
       <div class="pv2" id="search">
 
         <div>
-          <label class="db fw6 lh-copy f6" for="first">First search terms:</label>
+          <label class="db fw6 lh-copy f6" for="first">First set of search terms:</label>
           <textarea class="pa2 ba w-100" id="first" name="first" rows="1" cols="50">virus, bacteria</textarea>
         </div>
 
         <div>
-          <label class="db fw6 lh-copy f6" for="second">Second search terms:</label>
+          <label class="db fw6 lh-copy f6" for="second">Second set of search terms:</label>
           <textarea class="pa2 ba w-100" id="second" name="second" rows="1" cols="50">HLA-DQA1, HLA-DQB1, IL6, PDCD1, TIMP4</textarea>
         </div>
 
@@ -49,7 +49,7 @@
 
 
     <div class="container-fluid text-center mt-5">
-      <p class="f5 tc pv5">View the source code at <a href="https://github.com/slowkow/pubmed-pairs">github.com/slowkow/pubmed-pairs</a></p>
+      <p class="f5 tc pv5">View the source code at <a class="link" href="https://github.com/slowkow/pubmed-pairs">github.com/slowkow/pubmed-pairs</a></p>
     </div>
 
     </section>
@@ -57,14 +57,19 @@
   </body>
 
   <style>
-  .hits {
-    cursor: pointer;
-    color: blue;
-    /*text-decoration: underline;*/
+  /* unvisited link */
+  a:link {
+      color: #00449e;
   }
-  .dots { color: blue; cursor: pointer; }
-  .more {display: none;}
-  .pmid {user-select: all;}
+  /* visited link */
+  a:visited {
+      /*color: rgb(85, 26, 139);*/
+      color: rgb(127 11 193);
+  }
+  .hits { cursor: pointer; color: #00449e; }
+  .dots { cursor: pointer; color: #00449e; }
+  .more { display: none; }
+  .pmid { user-select: all; }
   </style>
 
 	<script type="module" src="main.js"></script>
