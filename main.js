@@ -189,7 +189,7 @@ function build_papers(papers, title) {
   var my_html = rows.join('\n')
   // use regex to highlight matches (allowing hyphens like "IL6" and "IL-6")
   for (const search of title.split(', ')) {
-    const search2 = search.split('').join('-?')
+    const search2 = search.split('').join('-?').trim()
     const regex = new RegExp(`(${search2})`, "ig")
     my_html = my_html.replace(regex, '<span class="searchterm">$1</span>')
   }
