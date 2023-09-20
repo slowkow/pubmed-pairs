@@ -168,7 +168,6 @@ async function build_table(data) {
 }
 
 function build_papers(papers, title) {
-  const [first, second] = title.split(', ')
   const papers_title = document.getElementById("papers-title")
   papers_title.innerText = title
   const papers_div = document.getElementById("papers")
@@ -188,8 +187,12 @@ function build_papers(papers, title) {
     rows.push(html)
   }
   var my_html = rows.join('\n')
-  my_html = my_html.replaceAll(first, `<span class="searchterm">${first}</span>`)
-  my_html = my_html.replaceAll(second, `<span class="searchterm">${second}</span>`)
+  // use regex to highlight matches (allowing hyphens like "IL6" and "IL-6")
+  for (const search of title.split(', ')) {
+    const search2 = search.split('').join('-?')
+    const regex = new RegExp(`(${search2})`, "ig")
+    my_html = my_html.replace(regex, '<span class="searchterm">$1</span>')
+  }
   papers_div.innerHTML = my_html
   const dots = document.getElementsByClassName("dots")
   for (const dot of dots) {
