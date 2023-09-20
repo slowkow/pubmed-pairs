@@ -35,7 +35,7 @@ var cache_get_papers = {}
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 function pairs(first, second) {
-	var pairs = []
+  var pairs = []
   for (const x of first) {
     for (const y of second) {
       pairs.push(`${x} ${y}`)
@@ -55,7 +55,8 @@ async function count_papers(first, second) {
     var resp = await (async function() {
       const queryParams = {
         email: 'kslowikowski@gmail.com',
-        usehistory: 'n', db: 'pubmed', term: term, retmode: 'json'
+        usehistory: 'n', db: 'pubmed', term: term, retmode: 'json',
+        sort: 'relevance'
       }
       const queryString = new URLSearchParams(queryParams).toString()
       console.log(`eutils/esearch.fcgi?${queryString}`)
@@ -77,7 +78,8 @@ async function get_papers(first, second) {
     var text = await (async function() {
       const queryParams = {
         email: 'kslowikowski@gmail.com',
-        usehistory: 'y', db: 'pubmed', term: term, retmode: 'json'
+        usehistory: 'y', db: 'pubmed', term: term, retmode: 'json',
+        sort: 'relevance'
       }
       const queryString = new URLSearchParams(queryParams).toString()
       return await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?${queryString}`)
@@ -117,60 +119,61 @@ async function get_papers(first, second) {
 }
 
 async function build_table(data) {
-	var head = `<tr class="striped--near-white">
+  var head = `<tr class="striped--near-white">
     <th class="pv2 ph3">Pair</th>
     <th class="pv2 ph3">Query</th>
     <th class="pv2 ph3">Results</th>
     <th class="pv2 ph3">View results on PubMed</th>
   </tr>`
-	var rows = [head]
+  var rows = [head]
   var i = 0
-	for (const d of data) {
+  for (const d of data) {
     i++
-		var count = `<span class="hits" id="${d.pair}">${d.count}</span>`
+    var count = `<span class="hits" id="${d.pair}">${d.count}</span>`
     if (d.count == 0) {
       count = `<span class="mid-gray" id="${d.pair}">${d.count}</span>`
     }
     var link = `<a target="_blank" rel="noopener noreferrer" class="link" href="https://pubmed.ncbi.nlm.nih.gov/?term=${d.pair}">pubmed</a>`
-		rows.push(`<tr class="striped--near-white">
+    rows.push(`<tr class="striped--near-white">
       <td class="pv2 ph3">${i}</td>
       <td class="pv2 ph3">${d.pair}</td>
       <td class="pv2 ph3">${count}</td>
       <td class="pv2 ph3">${link}</td>
     </tr>`)
-	}
+  }
   while (i++ < g_table_length) {
-		rows.push(`<tr class="striped--near-white">
+    rows.push(`<tr class="striped--near-white">
       <td class="pv2 ph3">${i}</td>
       <td class="pv2 ph3"> </td>
       <td class="pv2 ph3"> </td>
       <td class="pv2 ph3"> </td>
     </tr>`)
   }
-	var table = `<table class="collapse ba br2 b--black-10 pv2 ph3 mt4">
+  var table = `<table class="collapse ba br2 b--black-10 pv2 ph3 mt4">
     <tbody>${rows.join('')}</tbody>
   </table>`
-	document.getElementById("table").innerHTML = table
-	for (const d of data) {
-		if (g_build_table_first && d.count > 0) {
+  document.getElementById("table").innerHTML = table
+  for (const d of data) {
+    if (g_build_table_first && d.count > 0) {
       g_build_table_first = false
-			const papers = await get_papers(d.first, d.second)
-			build_papers(papers, d.pair)
-		}
-		var el = document.getElementById(d.pair)
-		el.onclick = async function() {
-			const papers = await get_papers(d.first, d.second)
-			build_papers(papers, d.pair)
-		}
-	}
+      const papers = await get_papers(d.first, d.second)
+      build_papers(papers, `${d.first}, ${d.second}`)
+    }
+    var el = document.getElementById(d.pair)
+    el.onclick = async function() {
+      const papers = await get_papers(d.first, d.second)
+      build_papers(papers, `${d.first}, ${d.second}`)
+    }
+  }
 }
 
 function build_papers(papers, title) {
-	const papers_title = document.getElementById("papers-title")
-	papers_title.innerText = title
-	const papers_div = document.getElementById("papers")
+  const [first, second] = title.split(', ')
+  const papers_title = document.getElementById("papers-title")
+  papers_title.innerText = title
+  const papers_div = document.getElementById("papers")
   var rows = []
-	for (const p of papers) {
+  for (const p of papers) {
     var html = `<article class="pv1">
         <div class="flex flex-row">
           <div class="w-100">
@@ -184,7 +187,10 @@ function build_papers(papers, title) {
       </article>`
     rows.push(html)
   }
-	papers_div.innerHTML = rows.join('\n')
+  var my_html = rows.join('\n')
+  my_html = my_html.replaceAll(first, `<span class="searchterm">${first}</span>`)
+  my_html = my_html.replaceAll(second, `<span class="searchterm">${second}</span>`)
+  papers_div.innerHTML = my_html
   const dots = document.getElementsByClassName("dots")
   for (const dot of dots) {
     dot.onclick = function() {
@@ -196,8 +202,6 @@ function build_papers(papers, title) {
 
 async function click_search() {
   var retval = []
-  // const first = document.getElementById("first").value.split(/[ ,;]+/)
-  // const second = document.getElementById("second").value.split(/[ ,;]+/)
   const first = document.getElementById("first").value.split(/,/)
   const second = document.getElementById("second").value.split(/,/)
   const ps = pairs(first, second)
@@ -218,7 +222,7 @@ async function click_search() {
 
 const search = document.getElementById("search-button")
 search.onclick = async function() {
-	const data = await click_search()
-	build_table(data)
+  const data = await click_search()
+  build_table(data)
 }
 
