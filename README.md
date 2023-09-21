@@ -1,4 +1,4 @@
-# ✌️ pubmed-pairs
+<h1 align="center">✌️ pubmed-pairs</h1>
 
 <p align="center">
 Search <a href="https://pubmed.ncbi.nlm.nih.gov/">PubMed</a> for each pair of terms from two lists.
