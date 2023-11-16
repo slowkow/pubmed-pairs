@@ -205,8 +205,8 @@ function build_papers(papers, title) {
 
 async function click_search() {
   var retval = []
-  const first = document.getElementById("first").value.split(/,/)
-  const second = document.getElementById("second").value.split(/,/)
+  const first = document.getElementById("first").value.split(/[,;\r\n]+/)
+  const second = document.getElementById("second").value.split(/[,;\r\n]+/)
   const ps = pairs(first, second)
   g_table_length = ps.length
   const info =  document.getElementById("info")
